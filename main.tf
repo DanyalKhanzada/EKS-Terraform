@@ -1,6 +1,7 @@
 provider "aws" {
-  region = "ap-south-1"
+  region = "us-east-1"
 }
+
 
 resource "aws_vpc" "devopsshack_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -14,13 +15,14 @@ resource "aws_subnet" "devopsshack_subnet" {
   count = 2
   vpc_id                  = aws_vpc.devopsshack_vpc.id
   cidr_block              = cidrsubnet(aws_vpc.devopsshack_vpc.cidr_block, 8, count.index)
-  availability_zone       = element(["us-east-1a", "us-east-1b"], count.index)
+  availability_zone       = element(["us-east-1a", "us-east-1b"], count.index)  # Update this
   map_public_ip_on_launch = true
 
   tags = {
     Name = "devopsshack-subnet-${count.index}"
   }
 }
+
 
 resource "aws_internet_gateway" "devopsshack_igw" {
   vpc_id = aws_vpc.devopsshack_vpc.id
